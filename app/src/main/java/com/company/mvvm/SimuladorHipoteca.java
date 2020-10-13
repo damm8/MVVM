@@ -1,6 +1,7 @@
 package com.company.mvvm;
 
 public class SimuladorHipoteca {
+
     public static class Error {
         boolean CAPITAL_NEGATIVO;
         boolean PLAZO_NEGATIVO;
@@ -37,6 +38,7 @@ public class SimuladorHipoteca {
         callback.cuandoFinalice();
     }
 
+    // implementación inicial, se usa return en lugar de callbacks
     public double calcular(SolicitudHipoteca solicitud) {
         double interes = 0;
         try {

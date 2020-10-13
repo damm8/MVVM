@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f1f1f1"
+    android:padding="24dp">
+
+    <EditText
+        android:id="@+id/capital"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Capital"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:textSize="32sp"/>
+
+    <EditText
+        android:id="@+id/plazo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Plazo"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:textSize="32sp"/>
+
+    <Button
+        android:id="@+id/calcular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular cuota mensual"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center">
+        <TextView
+            android:id="@+id/cuota"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="48sp"
+            android:textColor="#ff4356"
+            android:gravity="center"/>
+        <ProgressBar
+            android:id="@+id/calculando"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center"/>
+    </FrameLayout>
+
+</LinearLayout>

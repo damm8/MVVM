@@ -16,7 +16,7 @@ public class SimuladorHipoteca {
     public void calcular(SolicitudHipoteca solicitud, Callback callback) {
         double interes = 0;
         try {
-            Thread.sleep(2500);
+            Thread.sleep(2500);  // long run operation
             interes = 0.01605;
         } catch (InterruptedException e) {}
 
@@ -42,7 +42,7 @@ public class SimuladorHipoteca {
     public double calcular(SolicitudHipoteca solicitud) {
         double interes = 0;
         try {
-            Thread.sleep(10000);
+            Thread.sleep(10000);   // long run operation
             interes = 0.01605;
         } catch (InterruptedException e) {}
 

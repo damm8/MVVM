@@ -8,7 +8,7 @@ public class SimuladorHipoteca {
     }
 
     interface Callback {
-        void cuandoTengaExito(double cuota);
+        void cuandoEsteElResultado(double cuota);
         void cuandoHayaError(Error error);
         void cuandoFinalice();
     }
@@ -33,7 +33,7 @@ public class SimuladorHipoteca {
         if(error.CAPITAL_NEGATIVO || error.PLAZO_NEGATIVO) {
             callback.cuandoHayaError(error);
         } else {
-            callback.cuandoTengaExito(solicitud.capital*interes/12/(1-Math.pow(1+(interes/12),-solicitud.plazo*12)));
+            callback.cuandoEsteElResultado(solicitud.capital*interes/12/(1-Math.pow(1+(interes/12),-solicitud.plazo*12)));
         }
         callback.cuandoFinalice();
     }

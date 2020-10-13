@@ -39,7 +39,7 @@ public class MiHipotecaViewModel extends AndroidViewModel {
 
                 simulador.calcular(solicitud, new SimuladorHipoteca.Callback() {
                     @Override
-                    public void cuandoTengaExito(double cuotaResultante) {
+                    public void cuandoEsteElResultado(double cuotaResultante) {
                         errorCapital.postValue(false);
                         errorPlazos.postValue(false);
                         cuota.postValue(cuotaResultante);

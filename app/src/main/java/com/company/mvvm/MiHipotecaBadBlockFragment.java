@@ -27,11 +27,14 @@ public class MiHipotecaBadBlockFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                SimuladorHipoteca simuladorHipoteca = new SimuladorHipoteca();
+
                 double capital = Double.parseDouble(binding.capital.getText().toString());
                 int plazo = Integer.parseInt(binding.plazo.getText().toString());
 
-                SimuladorHipoteca simuladorHipoteca = new SimuladorHipoteca();
-                double cuota = simuladorHipoteca.calcular(new SolicitudHipoteca(capital, plazo));
+                SimuladorHipoteca.Solicitud solicitud = new SimuladorHipoteca.Solicitud(capital, plazo);
+
+                double cuota = simuladorHipoteca.calcular(solicitud);
 
                 binding.cuota.setText(String.format("%.2f",cuota));
             }

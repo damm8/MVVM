@@ -2,44 +2,60 @@ package com.company.mvvm;
 
 public class SimuladorHipoteca {
 
-    public static class Error {
-        boolean CAPITAL_NEGATIVO;
-        boolean PLAZO_NEGATIVO;
+    public static class Solicitud {
+        public double capital;
+        public int plazo;
+
+        public Solicitud(double capital, int plazo) {
+            this.capital = capital;
+            this.plazo = plazo;
+        }
     }
 
     interface Callback {
-        void cuandoEsteElResultado(double cuota);
-        void cuandoHayaError(Error error);
-        void cuandoFinalice();
+        void cuandoEsteCalculadaLaCuota(double cuota);
+        void cuandoHayaErrorDeCapitalInferiorAlMinimo(double capitalMinimo);
+        void cuandoHayaErrorDePlazoInferiorAlMinimo(int plazoMinimo);
+        void cuandoEmpieceElCalculo();
+        void cuandoFinaliceElCalculo();
     }
 
-    public void calcular(SolicitudHipoteca solicitud, Callback callback) {
+    public void calcular(Solicitud solicitud, Callback callback) {
+
+        callback.cuandoEmpieceElCalculo();
+
         double interes = 0;
+        double capitalMinimo = 0;
+        int plazoMinimo = 0;
+
         try {
             Thread.sleep(2500);  // long run operation
             interes = 0.01605;
+            capitalMinimo = 1000;
+            plazoMinimo = 2;
         } catch (InterruptedException e) {}
 
-        Error error = new Error();
 
-        if (solicitud.capital < 0) {
-            error.CAPITAL_NEGATIVO = true;
+        boolean error = false;
+        if (solicitud.capital < capitalMinimo) {
+            callback.cuandoHayaErrorDeCapitalInferiorAlMinimo(capitalMinimo);
+            error = true;
         }
 
-        if (solicitud.plazo < 0) {
-            error.PLAZO_NEGATIVO = true;
+        if (solicitud.plazo < plazoMinimo) {
+            callback.cuandoHayaErrorDePlazoInferiorAlMinimo(plazoMinimo);
+            error = true;
         }
 
-        if(error.CAPITAL_NEGATIVO || error.PLAZO_NEGATIVO) {
-            callback.cuandoHayaError(error);
-        } else {
-            callback.cuandoEsteElResultado(solicitud.capital*interes/12/(1-Math.pow(1+(interes/12),-solicitud.plazo*12)));
+        if(!error) {
+            callback.cuandoEsteCalculadaLaCuota(solicitud.capital * interes / 12 / (1 - Math.pow(1 + (interes / 12), -solicitud.plazo * 12)));
         }
-        callback.cuandoFinalice();
+
+        callback.cuandoFinaliceElCalculo();
     }
 
     // implementación inicial, se usa return en lugar de callbacks
-    public double calcular(SolicitudHipoteca solicitud) {
+    public double calcular(Solicitud solicitud) {
         double interes = 0;
         try {
             Thread.sleep(10000);   // long run operation

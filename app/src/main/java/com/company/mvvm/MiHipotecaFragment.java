@@ -1,16 +1,15 @@
 package com.company.mvvm;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.company.mvvm.databinding.FragmentMiHipotecaBinding;
 
@@ -35,7 +34,23 @@ public class MiHipotecaFragment extends Fragment {
         binding.calcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validar()) {
+                boolean error = false;
+
+                try {
+                    capital = Double.parseDouble(binding.capital.getText().toString());
+                } catch (Exception e){
+                    binding.capital.setError("Introduzca un número");
+                    error = true;
+                }
+
+                try {
+                    plazo = Integer.parseInt(binding.plazo.getText().toString());
+                } catch (Exception e){
+                    binding.plazo.setError("Introduzca un número");
+                    error = true;
+                }
+
+                if (!error) {
                     miHipotecaViewModel.calcular(capital, plazo);
                 }
             }
@@ -53,53 +68,34 @@ public class MiHipotecaFragment extends Fragment {
             public void onChanged(Boolean calculando) {
                 if (calculando) {
                     binding.calculando.setVisibility(View.VISIBLE);
+                    binding.cuota.setVisibility(View.GONE);
                 } else {
                     binding.calculando.setVisibility(View.GONE);
+                    binding.cuota.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        miHipotecaViewModel.errorCapital.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        miHipotecaViewModel.errorCapital.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
-            public void onChanged(Boolean error) {
-                if (error) {
-                    binding.capital.setError("El capital debe ser positivo");
+            public void onChanged(Double capitalMinimo) {
+                if (capitalMinimo != null) {
+                    binding.capital.setError("El capital no puede ser inferor a " + capitalMinimo);
                 } else {
                     binding.capital.setError(null);
                 }
             }
         });
 
-        miHipotecaViewModel.errorPlazos.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        miHipotecaViewModel.errorPlazos.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Boolean error) {
-                if (error) {
-                    binding.plazo.setError("El plazo no puede ser negativo");
+            public void onChanged(Integer plazoMinimo) {
+                if (plazoMinimo != null) {
+                    binding.plazo.setError("El plazo no puede ser inferior a " + plazoMinimo + " años");
                 } else {
                     binding.plazo.setError(null);
                 }
             }
         });
-    }
-
-    boolean validar() {
-
-        boolean error = false;
-
-        try {
-            capital = Double.parseDouble(binding.capital.getText().toString());
-        } catch (Exception e){
-            binding.capital.setError("Introduzca un número");
-            error = true;
-        }
-
-        try {
-            plazo = Integer.parseInt(binding.plazo.getText().toString());
-        } catch (Exception e){
-            binding.plazo.setError("Introduzca un número");
-            error = true;
-        }
-
-        return !error;
     }
 }

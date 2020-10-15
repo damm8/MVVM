@@ -31,12 +31,12 @@ public class MiHipotecaBadLeakFragment extends Fragment {
                 double capital = Double.parseDouble(binding.capital.getText().toString());
                 int plazo = Integer.parseInt(binding.plazo.getText().toString());
 
-                SolicitudHipoteca solicitud = new SolicitudHipoteca(capital, plazo);
+                SimuladorHipoteca.Solicitud solicitud = new SimuladorHipoteca.Solicitud(capital, plazo);
 
-                new AsyncTask<SolicitudHipoteca, Void, Double>(){
+                new AsyncTask<SimuladorHipoteca.Solicitud, Void, Double>(){
 
                     @Override
-                    protected Double doInBackground(SolicitudHipoteca... solicitudes) {
+                    protected Double doInBackground(SimuladorHipoteca.Solicitud... solicitudes) {
                         SimuladorHipoteca simulador = new SimuladorHipoteca();
                         return simulador.calcular(solicitudes[0]);
                     }

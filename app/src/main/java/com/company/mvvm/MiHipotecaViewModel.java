@@ -16,8 +16,8 @@ public class MiHipotecaViewModel extends AndroidViewModel {
     SimuladorHipoteca simulador;
 
     MutableLiveData<Double> cuota = new MutableLiveData<>();
-    MutableLiveData<Boolean> errorCapital = new MutableLiveData<>();
-    MutableLiveData<Boolean> errorPlazos = new MutableLiveData<>();
+    MutableLiveData<Double> errorCapital = new MutableLiveData<>();
+    MutableLiveData<Integer> errorPlazos = new MutableLiveData<>();
     MutableLiveData<Boolean> calculando = new MutableLiveData<>();
 
     public MiHipotecaViewModel(@NonNull Application application) {
@@ -29,35 +29,37 @@ public class MiHipotecaViewModel extends AndroidViewModel {
 
     public void calcular(double capital, int plazo) {
 
-        final SolicitudHipoteca solicitud = new SolicitudHipoteca(capital, plazo);
+        final SimuladorHipoteca.Solicitud solicitud = new SimuladorHipoteca.Solicitud(capital, plazo);
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
 
-                calculando.postValue(true);
-
                 simulador.calcular(solicitud, new SimuladorHipoteca.Callback() {
                     @Override
-                    public void cuandoEsteElResultado(double cuotaResultante) {
-                        errorCapital.postValue(false);
-                        errorPlazos.postValue(false);
+                    public void cuandoEsteCalculadaLaCuota(double cuotaResultante) {
+                        errorCapital.postValue(null);
+                        errorPlazos.postValue(null);
                         cuota.postValue(cuotaResultante);
                     }
 
                     @Override
-                    public void cuandoHayaError(SimuladorHipoteca.Error error) {
-                        if (error.CAPITAL_NEGATIVO) {
-                            errorCapital.postValue(true);
-                        }
-
-                        if (error.PLAZO_NEGATIVO) {
-                            errorPlazos.postValue(true);
-                        }
+                    public void cuandoHayaErrorDeCapitalInferiorAlMinimo(double capitalMinimo) {
+                        errorCapital.postValue(capitalMinimo);
                     }
 
                     @Override
-                    public void cuandoFinalice() {
+                    public void cuandoHayaErrorDePlazoInferiorAlMinimo(int plazoMinimo) {
+                        errorPlazos.postValue(plazoMinimo);
+                    }
+
+                    @Override
+                    public void cuandoEmpieceElCalculo() {
+                        calculando.postValue(true);
+                    }
+
+                    @Override
+                    public void cuandoFinaliceElCalculo() {
                         calculando.postValue(false);
                     }
                 });

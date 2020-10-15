@@ -14,6 +14,8 @@ public class SimuladorHipoteca {
 
     interface Callback {
         void cuandoEsteCalculadaLaCuota(double cuota);
+        // (i) Los dos metodos de error se pueden simplificar en uno:
+        // void cuandoHayaError(Error error);
         void cuandoHayaErrorDeCapitalInferiorAlMinimo(double capitalMinimo);
         void cuandoHayaErrorDePlazoInferiorAlMinimo(int plazoMinimo);
         void cuandoEmpieceElCalculo();
